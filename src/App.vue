@@ -1,22 +1,42 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+<div id='con'>
+        The Easiest #1 Rated Online Quiz Maker<br>
+Publish your quiz in a matter of minutes. Go ahead Try it now
+<br><br>
+<button type='button' class='btn btn-success' id='button'>Create Quiz</button>
+</div>
+
+<router-view></router-view>
+     </div>
+
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+
 
 export default {
   name: 'app',
   components: {
-    HelloWorld
+  },
+  data(){
+return {
+  msg:'Hello',
+  name:''
+}
+  },
+  methods:{
+    fun(name){
+      this.name=name;
+    },
+    fg(){
+      this.name='gio';
+    }
   }
 }
 </script>
 
-<style>
+<style >
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -24,5 +44,16 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+#button{
+  background-color:MediumVioletRed ;
+  border-color:MediumVioletRed ;
+  width:150px;
+  height:50px;
+}
+#con{
+  background-color:DarkTurquoise ;
+  font-size:20px;
+  color:white;
 }
 </style>
