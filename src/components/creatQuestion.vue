@@ -7,7 +7,8 @@
                         <div class="col-md-10">
                             <label for="input">Question Name</label><br>
                             <div class="form-group">
-                                <input class="form-control" v-bind:id="index" type="text" :ref="count" placeholder="Type your question"
+                                <input class="form-control" v-bind:id="indexOfQuestions" type="text" :ref="0"
+                                       placeholder="Type your question"
                                        v-model="question" v-on:input="check">
                             </div>
                             <div class="panel panel-warning">
@@ -15,8 +16,14 @@
                                     Answers
                                 </div>
                                 <div class="panel-body">
-                                    <div v-for='index in count' :key='index' id="d">
-                                        <createAnswer :count="count" v-on:input='counter' :arrayOfAnswers="arrayOfAnswers"  :arrayOfQuestions='arrayOfQuestions' :index="index"  v-on:check="isCorrect"/>
+                                    <div v-for='index in countOfAnswers' :key='index' id="d">
+                                        <createAnswer :count="countOfAnswers"
+                                                      :countOfQuestion="countOfQuestion"
+                                                      v-on:input='counter'
+                                                      :arrayOfQuestions='arrayOfQuestions'
+                                                      :index="index"
+                                                      :idOfQuestion="id"
+                                                      v-on:check="isCorrect"/>
                                     </div>
                                 </div>
                             </div>
@@ -40,33 +47,32 @@
         },
         props: {
             countOfQuestion: Number,
-            index: Number,
+            indexOfQuestions: Number,
             arrayOfQuestions: Array,
         },
         data() {
             return {
-                count: 0,
+                countOfAnswers: 0,
                 question: '',
                 answer: '',
                 checkbox: false,
-                arrayOfAnswers:[]
+                id: 0
             }
         },
         methods: {
             counter(answer) {
-                console.log(answer);
                 this.$emit('answer', answer);
             },
             check() {
 
-                let id = this.$refs[0].id;
-                this.arrayOfQuestions[id - 1] = '';
-                this.arrayOfQuestions[id - 1]+= this.question;
+                this.id = parseInt(this.$refs[0].id);
+                this.arrayOfQuestions[this.id - 1].name = '';
+                this.arrayOfQuestions[this.id - 1].name += this.question;
                 // this.$emit('input1', this.question);
                 console.log(this.arrayOfQuestions);
             },
             addComponent() {
-                if (this.count === 0) {
+                if (this.countOfAnswers === 0) {
                     this.$http.post('http://localhost/ajaxfile.php', {
                         request: 3,
                         question: this.question,
@@ -74,13 +80,19 @@
 
                     });
                 }
-                this.count = this.count + 1;
-                this.arrayOfAnswers.push('');
+                this.id = parseInt(this.$refs[0].id);
+                this.arrayOfQuestions[this.id-1].answers.push({});
+
+                this.arrayOfQuestions[this.id - 1].answers[this.countOfAnswers].name = '';
+
+                this.arrayOfQuestions[this.id - 1].answers[this.countOfAnswers].isTrue = false;
+
+                this.countOfAnswers = this.countOfAnswers + 1;
                 this.insertdata();
 
             },
             insertdata() {
-                if (this.count > 1) {
+                if (this.countOfAnswers > 1) {
                     this.$http.post('http://localhost/ajaxfile.php', {
                         request: 4,
                         answer: this.answer,
@@ -118,7 +130,7 @@
     /*    margin-left: 75px;*/
 
     /*}*/
-    .col-md-2{
-        margin-right:20px;
+    .col-md-2 {
+        margin-right: 20px;
     }
 </style>

@@ -12,17 +12,11 @@
                             <label for="formGroupExampleInput">Quiz Title</label>
                             <input type="text" class="form-control" id="formGroupExampleInput"
                                    placeholder="Example input"
-                                   v-model="quiz" v-on:input="validationOfQuiz">
-                            <div v-if="errorOfQuiz!==''" style="color:red;font-size:15px">
-                                {{errorOfQuiz}}
-                            </div>
+                                   v-model="quiz">
                         </div>
                         <label for="formGroupExampleInput">Min correct</label>
                         <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Example input"
-                               v-model="minCorrect" v-on:input="validation">
-                        <div v-if="errorOfMinCorrect!==''" style="color:red;font-size:15px">
-                            {{errorOfMinCorrect}}
-                        </div>
+                               v-model="minCorrect" >
                     </div>
                 </div>
             </div>
@@ -43,14 +37,13 @@
                         <div v-for='index in questionCount' :key='index' id="d">
                             <div v-if='questionCount > 0'>
                                 <createQuestion :countOfQuestion="questionCount"
-                                                :index="index"
+                                                :indexOfQuestions="index"
                                                 :arrayOfQuestions="arrayOfQuestions"
-                                                v-on:input1="validationOfQuestion"
-                                                v-on:answer="answer"/>
+                                />
                             </div>
                         </div>
 
-                        <button type="button" @click="submit()" id='but'>Submit</button>
+                        <button type="button" @click="submit" id='but'>Submit</button>
                         <button class="btn btn-success pull-right"
                                 v-on:click='addComponent'>+ Add Question
                         </button>
@@ -87,57 +80,63 @@
                 }
 
                 this.errorOfQuiz = '';
-                this.insertdata();
+                // this.insertdata();
+                this.arrayOfQuestions.push({});
+                this.arrayOfQuestions[this.questionCount].name = '';
+                this.arrayOfQuestions[this.questionCount].answers = [];
                 this.questionCount += 1;
-                this.arrayOfQuestions.push('');
+
 
             },
-
-            insertdata() {
-                if (this.count === 0) {
+            submit() {
+                var counter = 0;
+                var count = 0;
+                let questions=this.arrayOfQuestions;
+                for (let i = 0; i < questions.length; i++) {
+                    if (questions[i].name === '' || questions[i].answers === []) {
+                        counter++;
+                        this.error = 'You should fill all questions'
+                        break;
+                    }
+                    if (questions[i].answers.length === 0) {
+                        counter++;
+                        this.error = 'Questions should have answers';
+                        break;
+                    }
+                    for (let g = 0; g < questions[i].answers.length; g++) {
+                        if (questions[i].answers[0].name !== '' && questions[i].answers[1] === undefined) {
+                            counter++;
+                            this.error = 'Question should have more than one answer ';
+                            break;
+                        }
+                        if (questions[i].answers[g].name === '') {
+                            counter++;
+                            this.error = 'Answer can not be blanck';
+                            break;
+                        }
+                        if (questions[i].answers[g].isTrue === true) {
+                            count++;
+                        }
+                    }
+                    if(counter>0){
+                        break;
+                    }
+                    if (count < 1) {
+                        counter++;
+                        this.error = 'Question should have correct answer';
+                        break
+                    }
+                    count=0;
+                }
+                if (counter < 1) {
+                    console.log(this.arrayOfQuestions);
                     this.$http.post('http://localhost/ajaxfile.php', {
-                        request: 2,
-                        quiz: this.quiz,
-                        minCorrect: this.minCorrect
-                    }, {emulateJSON: true}).then(() => {
+                        request: 4,
+                        arrayOfQuestion:this.arrayOfQuestions,
+                    },{emulateJSON: true}).then(() => {
 
                     });
-                }
-            },
-
-            validationOfQuestion(question) {
-                if (question !== '') {
-                    this.question = question;
-                }
-                if (question === '') {
-                    this.question = '';
-                    this.empty = '';
-                    this.a++;
-                }
-            },
-            answer(answer) {
-                console.log(answer);
-            },
-            validation() {
-                let minCorrect;
-                console.log(this.minCorrect)
-                minCorrect = parseInt(this.minCorrect)
-                console.log(minCorrect);
-                if (Number.isInteger(minCorrect) === false) {
-                    this.errorOfMinCorrect = 'Min correct should be number'
-                }
-                if (this.minCorrect == '') {
-                    this.errorOfMinCorrect = '';
-                }
-                if (Number.isInteger(minCorrect)) {
-                    this.errorOfMinCorrect = '';
-                }
-            },
-            validationOfQuiz() {
-                if (this.quiz === '') {
-                    this.errorOfQuiz = 'Quiz can not be blank'
-                } else {
-                    this.errorOfQuiz = '';
+                    this.error = '';
                 }
             }
         }

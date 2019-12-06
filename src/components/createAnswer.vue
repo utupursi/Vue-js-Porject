@@ -21,6 +21,8 @@
             arrayOfAnswers:Array,
             arrayOfQuestions:Array,
             index:Number,
+            countOfQuestion:Number,
+            idOfQuestion:Number,
         },
         data() {
             return {
@@ -31,15 +33,17 @@
         },
         methods: {
             input() {
-
-                let id = this.$refs[0].id;
-                this.arrayOfAnswers[id - 1] = '';
-                this.arrayOfAnswers[id - 1] += this.answer;
-                this.arrayOfQuestions.push(this.arrayOfAnswers);
-                console.log(this.arrayOfAnswers);
+              let id=this.$refs[0].id-1;
+              let idOfQuestions=this.idOfQuestion-1;
+                this.arrayOfQuestions[idOfQuestions].answers[id].name= '';
+                this.arrayOfQuestions[idOfQuestions].answers[id].name += this.answer;
+                console.log(this.arrayOfQuestions);
                 this.$emit('input', this.answer);
             },
             check() {
+                let id=this.$refs[0].id-1;
+                let idOfQuestions=this.idOfQuestion-1;
+               this.arrayOfQuestions[idOfQuestions].answers[id].isTrue=this.checkbox;
                 this.$emit('check', this.checkbox);
             }
         },
