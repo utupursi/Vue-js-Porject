@@ -14,9 +14,18 @@
                                    placeholder="Example input"
                                    v-model="quiz">
                         </div>
-                        <label for="formGroupExampleInput">Min correct</label>
-                        <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Example input"
-                               v-model="minCorrect" >
+                        <div class="form-group">
+                            <label for="formGroupExampleInput">Min correct</label>
+                            <input type="text" class="form-control" id="formGroupExampleInput"
+                                   placeholder="Example input"
+                                   v-model="minCorrect">
+                        </div>
+                        <div class="form-group">
+                            <label for="formGroupExampleInput">Maximal number of questions</label>
+                            <input type="text" class="form-control" id="formGroupExampleInput"
+                                   placeholder="Example input"
+                                   v-model="maxNumberOfQuestions">
+                        </div>
                     </div>
                 </div>
             </div>
@@ -39,11 +48,11 @@
                                 <createQuestion :countOfQuestion="questionCount"
                                                 :indexOfQuestions="index"
                                                 :arrayOfQuestions="arrayOfQuestions"
+
                                 />
                             </div>
                         </div>
-
-                        <button type="button" @click="submit" id='but'>Submit</button>
+                        <button type="button" @click="submit" id='but' disabled>Submit</button>
                         <button class="btn btn-success pull-right"
                                 v-on:click='addComponent'>+ Add Question
                         </button>
@@ -70,28 +79,34 @@
                 minCorrect: '',
                 errorOfMinCorrect: '',
                 errorOfQuiz: '',
-                arrayOfQuestions: []
+                arrayOfQuestions: [],
+                maxNumberOfQuestions: ''
             }
         },
         methods: {
             addComponent() {
-                if (this.quiz === '') {
-                    this.errorOfQuiz = 'Quiz  can not be blank';
+                if (parseInt(this.maxNumberOfQuestions) === this.questionCount) {
+                    this.error = 'Number of questions can not be more than maximal number';
                 }
-
-                this.errorOfQuiz = '';
-                // this.insertdata();
-                this.arrayOfQuestions.push({});
-                this.arrayOfQuestions[this.questionCount].name = '';
-                this.arrayOfQuestions[this.questionCount].answers = [];
-                this.questionCount += 1;
-
+                // console.log(this.question);
+                // if(this.question===''&&this.questionCount>0){
+                //     this.error='Question can not be blank';
+                // }
+                else {
+                    this.error='';
+                    this.errorOfQuiz = '';
+                    this.arrayOfQuestions.push({});
+                    this.arrayOfQuestions[this.arrayOfQuestions.length-1].name = '';
+                    this.arrayOfQuestions[this.arrayOfQuestions.length-1].answers = [];
+                    this.arrayOfQuestions[this.arrayOfQuestions.length-1].id = this.questionCount;
+                    this.questionCount += 1;
+                }
 
             },
             submit() {
                 var counter = 0;
                 var count = 0;
-                let questions=this.arrayOfQuestions;
+                let questions = this.arrayOfQuestions;
                 for (let i = 0; i < questions.length; i++) {
                     if (questions[i].name === '' || questions[i].answers === []) {
                         counter++;
@@ -118,7 +133,7 @@
                             count++;
                         }
                     }
-                    if(counter>0){
+                    if (counter > 0) {
                         break;
                     }
                     if (count < 1) {
@@ -126,19 +141,20 @@
                         this.error = 'Question should have correct answer';
                         break
                     }
-                    count=0;
+                    count = 0;
                 }
                 if (counter < 1) {
                     console.log(this.arrayOfQuestions);
                     this.$http.post('http://localhost/ajaxfile.php', {
                         request: 4,
-                        arrayOfQuestion:this.arrayOfQuestions,
-                    },{emulateJSON: true}).then(() => {
+                        arrayOfQuestion: this.arrayOfQuestions,
+                    }, {emulateJSON: true}).then(() => {
 
                     });
                     this.error = '';
                 }
-            }
+            },
+
         }
     }
 

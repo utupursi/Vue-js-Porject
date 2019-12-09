@@ -34,7 +34,7 @@
         methods: {
             input() {
               let id=this.$refs[0].id-1;
-              let idOfQuestions=this.idOfQuestion-1;
+              let idOfQuestions=this.idOfQuestion;
                 this.arrayOfQuestions[idOfQuestions].answers[id].name= '';
                 this.arrayOfQuestions[idOfQuestions].answers[id].name += this.answer;
                 console.log(this.arrayOfQuestions);
@@ -42,7 +42,7 @@
             },
             check() {
                 let id=this.$refs[0].id-1;
-                let idOfQuestions=this.idOfQuestion-1;
+                let idOfQuestions=this.idOfQuestion;
                this.arrayOfQuestions[idOfQuestions].answers[id].isTrue=this.checkbox;
                 this.$emit('check', this.checkbox);
             }

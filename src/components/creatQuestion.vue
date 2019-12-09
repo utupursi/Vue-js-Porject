@@ -1,5 +1,5 @@
 <template>
-    <div class="row">
+    <div class="row" :ref="1">
         <div class="col-md-12">
             <div class="panel panel-default">
                 <div class="panel-body">
@@ -7,7 +7,7 @@
                         <div class="col-md-10">
                             <label for="input">Question Name</label><br>
                             <div class="form-group">
-                                <input class="form-control" v-bind:id="indexOfQuestions" type="text" :ref="0"
+                                <input class="form-control" v-bind:id="indexOfQuestions-1" type="text" :ref="0"
                                        placeholder="Type your question"
                                        v-model="question" v-on:input="check">
                             </div>
@@ -22,7 +22,7 @@
                                                       v-on:input='counter'
                                                       :arrayOfQuestions='arrayOfQuestions'
                                                       :index="index"
-                                                      :idOfQuestion="id"
+                                                      :idOfQuestion="indexOfQuestions-1"
                                                       v-on:check="isCorrect"/>
                                     </div>
                                 </div>
@@ -31,6 +31,7 @@
                         <div class="col-md-2" style="padding-top: 24px">
                             <button id='myid' class="btn btn-success" v-on:click='addComponent'>+ Add Answer</button>
                         </div>
+                        <button class="btn btn-danger" @click="deleteQuestion" id="x">x</button>
                     </div>
                 </div>
             </div>
@@ -56,7 +57,7 @@
                 question: '',
                 answer: '',
                 checkbox: false,
-                id: 0
+                id: 0,
             }
         },
         methods: {
@@ -64,28 +65,32 @@
                 this.$emit('answer', answer);
             },
             check() {
-
+                this.$emit('questionInput', this.question);
                 this.id = parseInt(this.$refs[0].id);
-                this.arrayOfQuestions[this.id - 1].name = '';
-                this.arrayOfQuestions[this.id - 1].name += this.question;
-                // this.$emit('input1', this.question);
+                this.arrayOfQuestions.forEach(question => {
+                    if (question.id === this.id) {
+                        question.name = '';
+                        question.name += this.question;
+                    }
+                });
                 console.log(this.arrayOfQuestions);
             },
             addComponent() {
-                if (this.countOfAnswers === 0) {
-                    this.$http.post('http://localhost/ajaxfile.php', {
-                        request: 3,
-                        question: this.question,
-                    }, {emulateJSON: true}).then(() => {
-
-                    });
-                }
+                // if (this.countOfAnswers === 0) {
+                //     this.$http.post('http://localhost/ajaxfile.php', {
+                //         request: 3,
+                //         question: this.question,
+                //     }, {emulateJSON: true}).then(() => {
+                //
+                //     });
+                // }
                 this.id = parseInt(this.$refs[0].id);
-                this.arrayOfQuestions[this.id-1].answers.push({});
+                console.log(this.$refs[0]);
+                this.arrayOfQuestions[this.id].answers.push({});
 
-                this.arrayOfQuestions[this.id - 1].answers[this.countOfAnswers].name = '';
+                this.arrayOfQuestions[this.id].answers[this.countOfAnswers].name = '';
 
-                this.arrayOfQuestions[this.id - 1].answers[this.countOfAnswers].isTrue = false;
+                this.arrayOfQuestions[this.id].answers[this.countOfAnswers].isTrue = false;
 
                 this.countOfAnswers = this.countOfAnswers + 1;
                 this.insertdata();
@@ -107,6 +112,19 @@
                 console.log(correct);
                 this.checkbox = correct;
 
+            },
+            deleteQuestion() {
+                let i = 0;
+                this.id = parseInt(this.$refs[0].id);
+                console.log(this.$refs[0]);
+                this.arrayOfQuestions.forEach(question => {
+                    if (question.name === this.question) {
+                        this.arrayOfQuestions.splice(i, 1);
+                    }
+                    i++;
+                });
+                this.$refs[1].remove();
+                console.log(this.arrayOfQuestions);
             }
         },
 
@@ -132,5 +150,18 @@
     /*}*/
     .col-md-2 {
         margin-right: 20px;
+    }
+
+    .row {
+        position: relative;
+    }
+
+    .fa {
+        position: fixed;
+        right: 50px;
+    }
+
+    #x {
+        border-radius: 16px;
     }
 </style>
