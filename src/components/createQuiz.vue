@@ -12,19 +12,19 @@
                             <label for="formGroupExampleInput">Quiz Title</label>
                             <input type="text" class="form-control" id="formGroupExampleInput"
                                    placeholder="Example input"
-                                   v-model="quiz">
+                                   v-model="quiz" v-on:input="inputQuiz">
                         </div>
                         <div class="form-group">
                             <label for="formGroupExampleInput">Min correct</label>
                             <input type="text" class="form-control" id="formGroupExampleInput"
                                    placeholder="Example input"
-                                   v-model="minCorrect">
+                                   v-model="minCorrect" v-on:input="inputMinCorrect">
                         </div>
                         <div class="form-group">
                             <label for="formGroupExampleInput">Maximal number of questions</label>
                             <input type="text" class="form-control" id="formGroupExampleInput"
                                    placeholder="Example input"
-                                   v-model="maxNumberOfQuestions">
+                                   v-model="maxNumberOfQuestions" v-on:input="inputMaxQuestion">
                         </div>
                     </div>
                 </div>
@@ -52,7 +52,7 @@
                                 />
                             </div>
                         </div>
-                        <button type="button" @click="submit" id='but' disabled>Submit</button>
+                        <button type="button" @click="submit" id='but'>Submit</button>
                         <button class="btn btn-success pull-right"
                                 v-on:click='addComponent'>+ Add Question
                         </button>
@@ -93,12 +93,15 @@
                 //     this.error='Question can not be blank';
                 // }
                 else {
-                    this.error='';
+                    this.error = '';
                     this.errorOfQuiz = '';
                     this.arrayOfQuestions.push({});
-                    this.arrayOfQuestions[this.arrayOfQuestions.length-1].name = '';
-                    this.arrayOfQuestions[this.arrayOfQuestions.length-1].answers = [];
-                    this.arrayOfQuestions[this.arrayOfQuestions.length-1].id = this.questionCount;
+                    this.arrayOfQuestions.quizTitle = this.quiz;
+                    this.arrayOfQuestions.minCorrect = this.minCorrect;
+                    this.arrayOfQuestions.maxQuestion = this.maxNumberOfQuestions;
+                    this.arrayOfQuestions[this.arrayOfQuestions.length - 1].name = '';
+                    this.arrayOfQuestions[this.arrayOfQuestions.length - 1].answers = [];
+                    this.arrayOfQuestions[this.arrayOfQuestions.length - 1].id = this.questionCount;
                     this.questionCount += 1;
                 }
 
@@ -144,16 +147,34 @@
                     count = 0;
                 }
                 if (counter < 1) {
+                    let id;
                     console.log(this.arrayOfQuestions);
-                    this.$http.post('http://localhost/ajaxfile.php', {
-                        request: 4,
-                        arrayOfQuestion: this.arrayOfQuestions,
+                    this.$http.post('http://localhost:8080/quiz/create', {
+                        subject: this.quiz,
+                        min_correct: this.minCorrect,
+                        max_question: this.maxNumberOfQuestions,
                     }, {emulateJSON: true}).then(() => {
-
                     });
+                    this.$http.get('http://localhost:8080/quiz/last', {
+                    }, {emulateJSON: true}).then((data) => {
+                           id=data.id;
+                    });
+                    console.log(id);
                     this.error = '';
                 }
             },
+            inputQuiz() {
+                this.arrayOfQuestions.quizTitle = '';
+                this.arrayOfQuestions.quizTitle += this.quiz;
+            },
+            inputMinCorrect() {
+                this.arrayOfQuestions.minCorrect = '';
+                this.arrayOfQuestions.minCorrect += this.minCorrect;
+            },
+            inputMaxQuestion() {
+                this.arrayOfQuestions.maxQuestion = '';
+                this.arrayOfQuestions.maxQuestion += this.maxNumberOfQuestions;
+            }
 
         }
     }

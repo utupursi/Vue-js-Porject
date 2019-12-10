@@ -35,16 +35,24 @@
             input() {
               let id=this.$refs[0].id-1;
               let idOfQuestions=this.idOfQuestion;
-                this.arrayOfQuestions[idOfQuestions].answers[id].name= '';
-                this.arrayOfQuestions[idOfQuestions].answers[id].name += this.answer;
+              console.log(this.arrayOfQuestions[idOfQuestions]);
+                this.arrayOfQuestions.forEach(question => {
+                    if (question.id === idOfQuestions) {
+                        question.answers[id].name='';
+                        question.answers[id].name+=this.answer;
+                    }
+                });
                 console.log(this.arrayOfQuestions);
-                this.$emit('input', this.answer);
+                // this.$emit('input', this.answer);
             },
             check() {
                 let id=this.$refs[0].id-1;
                 let idOfQuestions=this.idOfQuestion;
-               this.arrayOfQuestions[idOfQuestions].answers[id].isTrue=this.checkbox;
-                this.$emit('check', this.checkbox);
+                this.arrayOfQuestions.forEach(question => {
+                    if (question.id === idOfQuestions) {
+                        question.answers[id].isTrue=this.checkbox;
+                    }
+                });
             }
         },
 

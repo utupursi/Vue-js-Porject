@@ -22,7 +22,7 @@
                                                       v-on:input='counter'
                                                       :arrayOfQuestions='arrayOfQuestions'
                                                       :index="index"
-                                                      :idOfQuestion="indexOfQuestions-1"
+                                                      :idOfQuestion="idOfQuestion"
                                                       v-on:check="isCorrect"/>
                                     </div>
                                 </div>
@@ -58,6 +58,7 @@
                 answer: '',
                 checkbox: false,
                 id: 0,
+                idOfQuestion:0
             }
         },
         methods: {
@@ -86,27 +87,16 @@
                 // }
                 this.id = parseInt(this.$refs[0].id);
                 console.log(this.$refs[0]);
-                this.arrayOfQuestions[this.id].answers.push({});
-
-                this.arrayOfQuestions[this.id].answers[this.countOfAnswers].name = '';
-
-                this.arrayOfQuestions[this.id].answers[this.countOfAnswers].isTrue = false;
-
+                this.arrayOfQuestions.forEach(question => {
+                    if (question.id === this.id) {
+                        question.answers.push({});
+                        question.answers[this.countOfAnswers].name='';
+                        question.answers[this.countOfAnswers].isTrue=false;
+                        this.idOfQuestion=question.id;
+                    }
+                });
                 this.countOfAnswers = this.countOfAnswers + 1;
-                this.insertdata();
 
-            },
-            insertdata() {
-                if (this.countOfAnswers > 1) {
-                    this.$http.post('http://localhost/ajaxfile.php', {
-                        request: 4,
-                        answer: this.answer,
-                        isCorrect: this.checkbox
-                    }, {emulateJSON: true}).then(() => {
-
-                    });
-                }
-                this.checkbox = false;
             },
             isCorrect(correct) {
                 console.log(correct);
