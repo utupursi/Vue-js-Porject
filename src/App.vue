@@ -1,13 +1,17 @@
 <template>
     <div id="app">
-        <div id='con' style="text-align: center">
-            The Easiest #1 Rated Online Quiz Maker<br>
-            Publish your quiz in a matter of minutes. Go ahead Try it now
-            <br><br>
-            <button type='button' class='btn btn-success' id='button'>
-                <router-link to="createQuiz" id="router">Create Quiz</router-link>
-            </button>
+        <div class="top-bar-left">
+            <ul class="menu main nav show-for-large">
+                <a class="top-bar__logo" href="/" title="Fly home">
+                    <img src="https://d24s38jd6z1bka.cloudfront.net/e3f6ce90/images/deadlyduck/logos/easy-lms-logo.svg"
+                         alt="Easy LMS" class="hide-for-small-only">
+                </a>
+                <li id="s"><a href="https://www.onlinequizcreator.com/pricing/item7640">Quiz Results</a></li>
+                <li id="s"><router-link to="startQuiz" id="router">Start Quiz</router-link></li>
+                <li id="s"><a href="https://www.onlinequizcreator.com/about-us/item12719">About us</a></li>
+            </ul>
         </div>
+         <mainVue/>
         <br>
         <router-view></router-view>
     </div>
@@ -16,22 +20,19 @@
 
 <script>
 
-
+import mainVue from './Create/main'
     export default {
         name: 'app',
-        components: {},
+        components: {
+            mainVue
+        },
         data() {
             return {
                 msg: 'Hello',
                 name: ''
             }
         },
-        methods: {
-            fun(name) {
-                this.name = name;
-            },
 
-        }
     }
 </script>
 
@@ -40,13 +41,11 @@
         font-family: 'Avenir', Helvetica, Arial, sans-serif;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
-        color: #2c3e50;
-        background-color: dodgerblue;
+
     }
 
     #button {
-        background-color: MediumVioletRed;
-        border-color: MediumVioletRed;
+
         width: 150px;
         height: 50px;
     }
@@ -60,4 +59,25 @@
         color: white;
 
     }
+
+    #s {
+        display: inline-block;
+    }
+
+    #s a {
+        color: white;
+    }
+
+    #s a:hover {
+        background-color: black;
+    }
+
+    .top-bar-left {
+        background-color: green;
+    }
+
+    img {
+        width: 100px;
+    }
 </style>
+

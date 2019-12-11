@@ -1,6 +1,9 @@
 <template>
     <div class="row" :ref="1">
         <div class="col-md-12">
+            <div class="col-md-2 pull-right" id="x">
+                <button class="btn btn-danger" @click="deleteQuestion" ><i class="fas fa-trash-alt"></i></button>
+            </div>
             <div class="panel panel-default">
                 <div class="panel-body">
                     <div class="row">
@@ -31,7 +34,6 @@
                         <div class="col-md-2" style="padding-top: 24px">
                             <button id='myid' class="btn btn-success" v-on:click='addComponent'>+ Add Answer</button>
                         </div>
-                        <button class="btn btn-danger" @click="deleteQuestion" id="x">x</button>
                     </div>
                 </div>
             </div>
@@ -114,6 +116,7 @@
                     i++;
                 });
                 this.$refs[1].remove();
+                this.$emit('deleteQuestion');
                 console.log(this.arrayOfQuestions);
             }
         },
@@ -142,16 +145,6 @@
         margin-right: 20px;
     }
 
-    .row {
-        position: relative;
-    }
 
-    .fa {
-        position: fixed;
-        right: 50px;
-    }
 
-    #x {
-        border-radius: 16px;
-    }
 </style>
