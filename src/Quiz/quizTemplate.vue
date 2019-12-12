@@ -18,12 +18,18 @@
 
                                 <div v-for="question in questions" :key="questions[question]">
                                     <div>
-                                        <h3>{{question.name}} </h3>
+                                    <h3>{{question.name}} </h3>
                                         <hr>
+
                                     </div>
                                     <loadAnswer v-for="answers in question.answers"
                                                 :key=question.answers[answers]
-                                                :answers='answers'/>
+                                                :answers='answers'
+                                                :question="question"
+                                                :questions="questions"
+                                                :arrayOfAnswers="arrayOfAnswers"
+                                                :arrayOfQuestions="arrayOfQuestions"
+                                    />
                                     <br>
                                 </div>
                                 <hr>
@@ -37,7 +43,7 @@
 
 
                         <div style="padding: 0 15px 15px 0" class="pull-right" id="container">
-                            <button id="nextButton" type="button" class="btn btn-success" hidden="hidden">Next</button>
+                            <button id="nextButton" type="button" class="btn btn-success" hidden="hidden" @click="submitData">Submit</button>
                         </div>
 
                         <div class="clearfix"></div>
@@ -67,7 +73,9 @@
         data() {
             return {
                 quiz: [],
-                questions: []
+                questions: [],
+                arrayOfAnswers: [],
+                arrayOfQuestions:[],
             }
         },
         created() {
@@ -82,7 +90,22 @@
                 this.questions = response.body;
                 console.log(response.body);
             });
-        }
+        },
+        methods:{
+            submitData() {
+                this.arrayOfAnswers.push({});
+                this.arrayOfAnswers[this.arrayOfAnswers.length - 1].minCorrect = this.quiz.min_correct;
+                this.arrayOfAnswers[this.arrayOfAnswers.length - 1].maxQuestion = this.quiz.max_question;
+                this.arrayOfAnswers[this.arrayOfAnswers.length - 1].quizId = this.quiz.id;
+                console.log(this.arrayOfAnswers);
+                    this.$http.post("http://localhost:8080/result/create", {
+                        arrayOfAnswers:this.arrayOfAnswers,
+                        arrayOfQuestions:this.arrayOfQuestions
+                    }, {emulateJSON: true}).then(() => {
+                    });
+                }
+            }
+
     }
 </script>
 
@@ -90,5 +113,6 @@
     .table {
         margin: auto;
     }
+
 </style>
 

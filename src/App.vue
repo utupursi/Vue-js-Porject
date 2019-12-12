@@ -1,5 +1,7 @@
 <template>
     <div id="app">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+
         <div class="top-bar-left">
             <ul class="menu main nav show-for-large">
                 <a class="top-bar__logo" href="/" title="Fly home">
@@ -38,10 +40,10 @@ import mainVue from './Create/main'
 
 <style>
     #app {
-        font-family: 'Avenir', Helvetica, Arial, sans-serif;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-
+        /*font-family: 'Avenir', Helvetica, Arial, sans-serif;*/
+        /*-webkit-font-smoothing: antialiased;*/
+        /*-moz-osx-font-smoothing: grayscale;*/
+      background-color: #000033;
     }
 
     #button {
@@ -65,15 +67,15 @@ import mainVue from './Create/main'
     }
 
     #s a {
-        color: white;
+        color: black;
     }
 
     #s a:hover {
-        background-color: black;
+        background-color: white
     }
 
     .top-bar-left {
-        background-color: green;
+        background-color:#00b3b3;
     }
 
     img {
