@@ -76,7 +76,6 @@
                         question.name += this.question;
                     }
                 });
-                console.log(this.arrayOfQuestions);
             },
             addComponent() {
                 // if (this.countOfAnswers === 0) {
@@ -101,7 +100,6 @@
 
             },
             isCorrect(correct) {
-                console.log(correct);
                 this.checkbox = correct;
 
             },
@@ -117,7 +115,6 @@
                 });
                 this.$refs[1].remove();
                 this.$emit('deleteQuestion');
-                console.log(this.arrayOfQuestions);
             }
         },
 

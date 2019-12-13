@@ -47,8 +47,6 @@
                 this.arrayOfAnswers[index].id= id;
                 this.arrayOfAnswers[index].selectedAnswer = value;
                 this.arrayOfQuestions[index].questionId=name;
-                console.log(this.arrayOfAnswers);
-                console.log(this.arrayOfQuestions);
             }
         }
     }

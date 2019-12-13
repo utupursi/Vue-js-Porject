@@ -18,7 +18,7 @@
 
                                 <div v-for="question in questions" :key="questions[question]">
                                     <div>
-                                    <h3>{{question.name}} </h3>
+                                        <h3>{{question.name}} </h3>
                                         <hr>
 
                                     </div>
@@ -43,7 +43,9 @@
 
 
                         <div style="padding: 0 15px 15px 0" class="pull-right" id="container">
-                            <button id="nextButton" type="button" class="btn btn-success" hidden="hidden" @click="submitData">Submit</button>
+                            <button id="nextButton" type="button" class="btn btn-success" hidden="hidden"
+                                    @click="submitData">Submit
+                            </button>
                         </div>
 
                         <div class="clearfix"></div>
@@ -55,9 +57,8 @@
 
 
         </div>
-
+        <router-view></router-view>
     </div>
-
 </template>
 
 <script>
@@ -75,7 +76,7 @@
                 quiz: [],
                 questions: [],
                 arrayOfAnswers: [],
-                arrayOfQuestions:[],
+                arrayOfQuestions: [],
             }
         },
         created() {
@@ -91,20 +92,21 @@
                 console.log(response.body);
             });
         },
-        methods:{
+        methods: {
             submitData() {
                 this.arrayOfAnswers.push({});
                 this.arrayOfAnswers[this.arrayOfAnswers.length - 1].minCorrect = this.quiz.min_correct;
                 this.arrayOfAnswers[this.arrayOfAnswers.length - 1].maxQuestion = this.quiz.max_question;
                 this.arrayOfAnswers[this.arrayOfAnswers.length - 1].quizId = this.quiz.id;
                 console.log(this.arrayOfAnswers);
-                    this.$http.post("http://localhost:8080/result/create", {
-                        arrayOfAnswers:this.arrayOfAnswers,
-                        arrayOfQuestions:this.arrayOfQuestions
-                    }, {emulateJSON: true}).then(() => {
-                    });
-                }
+                this.$http.post("http://localhost:8080/result/create", {
+                    arrayOfAnswers: this.arrayOfAnswers,
+                    arrayOfQuestions: this.arrayOfQuestions
+                }, {emulateJSON: true}).then(() => {
+                });
+                this.$router.push('/quizFinish');
             }
+        }
 
     }
 </script>
