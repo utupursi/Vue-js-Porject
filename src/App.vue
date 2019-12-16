@@ -12,7 +12,7 @@
                 </a>
                 <li id="s"><a href="/#/quizResult">Quiz Result</a></li>
                 <li id="s"><a href="/#/startQuiz">Start Quiz</a></li>
-                <li id="s"><a href="https://www.onlinequizcreator.com/about-us/item12719">About us</a></li>
+                <li id="s"><a href="/#/quizList">Quizzes</a></li>
             </ul>
         </div>
         <mainVue/>

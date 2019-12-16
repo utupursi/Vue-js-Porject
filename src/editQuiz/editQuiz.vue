@@ -26,7 +26,8 @@
                             <input type="text" class="form-control" id="formGroupExampleInput"
                                    placeholder="Example input"
                                    v-model="maxNumberOfQuestions" v-on:input="inputMaxQuestion">
-                            <div v-if="errorOfMaxNumberOfQuestion" style="color:red">{{errorOfMaxNumberOfQuestion}}</div>
+                            <div v-if="errorOfMaxNumberOfQuestion" style="color:red">{{errorOfMaxNumberOfQuestion}}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -45,12 +46,15 @@
                             {{error}}
                         </div>
 
-                        <div v-for='index in questionCount' :key='index' id="d">
-                            <div v-if='questionCount > 0'>
-                                <createQuestion :countOfQuestion="questionCount"
-                                                :indexOfQuestions="index"
-                                                :arrayOfQuestions="arrayOfQuestions"
-                                                v-on:deleteQuestion="deleteQuestion"
+                        <div v-for='index in arrayOfQuestions.length' :key='index' id="d">
+                            <div v-if='questionCount>0'>
+                                <editQuestion :countOfQuestion="questionCount"
+                                              :indexOfQuestions="index"
+                                              :questionName="arrayOfQuestions[index-1].name"
+                                              :answerCount="arrayOfQuestions[index-1].answers.length"
+                                              :idOfQuestion="arrayOfQuestions[index-1].id"
+                                              :arrayOfQuestions="arrayOfQuestions"
+                                              v-on:deleteQuestion="deleteQuestion"
 
                                 />
                             </div>
@@ -68,11 +72,12 @@
 </template>
 
 <script>
-    import CreateQuestion from './creatQuestion'
+    import editQuestion from './editQuestion'
 
     export default {
+        name: 'editQuiz',
         components: {
-            CreateQuestion
+            editQuestion
         },
         data() {
             return {
@@ -82,14 +87,67 @@
                 question: '',
                 minCorrect: '',
                 errorOfMinCorrect: '',
-                errorOfMaxNumberOfQuestion:'',
+                errorOfMaxNumberOfQuestion: '',
                 errorOfQuiz: '',
                 arrayOfQuestions: [],
+                arrayOfData: [],
                 arrayOfQuiz: [{}],
                 maxNumberOfQuestions: '',
-                errorOfMinNumber:'',
-                errorOfMaxNumber:''
+                errorOfMinNumber: '',
+                errorOfMaxNumber: '',
+                questionName:''
             }
+        },
+        created() {
+            let id = this.$route.params.id;
+            this.$http.get(`http://localhost:8080/quiz&question&answer/${id}`
+                , {emulateJSON: true}).then((response) => {
+
+                this.arrayOfData = response.body;
+
+                this.quiz = this.arrayOfData[0].quiz.subject;
+                this.minCorrect = this.arrayOfData[0].quiz.min_correct;
+                this.maxNumberOfQuestions = this.arrayOfData[0].quiz.max_question;
+
+            }).then(() => {
+                let i = 0;
+                this.arrayOfQuiz = [];
+                this.arrayOfQuiz.push({});
+
+                this.arrayOfData.forEach(question => {
+                    let counter = 0;
+                    if (i === 0) {
+                        this.arrayOfQuiz[0].quizTitle = question.quiz.subject;
+                        this.arrayOfQuiz[0].minCorrect = question.quiz.min_correct;
+                        this.arrayOfQuiz[0].maxQuestion = question.quiz.max_question;
+                    }
+                    this.arrayOfQuestions.push({});
+                    this.arrayOfQuestions[i].answers = [];
+                    this.arrayOfQuestions[i].name = question.name;
+
+                    question.answers.forEach(answer => {
+                        this.arrayOfQuestions[i].answers.push({});
+                        this.arrayOfQuestions[i].answers[counter].name = answer.name;
+                        if (answer.is_correct === '0') {
+                            this.arrayOfQuestions[i].answers[counter].isTrue = false;
+                        } else {
+                            this.arrayOfQuestions[i].answers[counter].isTrue = true;
+                        }
+                        counter++;
+                    });
+                    this.arrayOfQuestions[i].id = i;
+                    i++;
+                });
+                this.questionCount = this.arrayOfData.length;
+                console.log(this.arrayOfQuestions);
+            }).then(()=>{
+                this.arrayOfQuestions.forEach(question => {
+                    if (question.id === this.id) {
+                        question.name = '';
+                        question.name += this.question;
+                    }
+                });
+            })
         },
         methods: {
             addComponent() {
@@ -105,7 +163,7 @@
                     this.error = '';
                     this.errorOfQuiz = '';
                     this.arrayOfQuestions.push({});
-                    this.arrayOfQuiz=[];
+                    this.arrayOfQuiz = [];
                     this.arrayOfQuiz.push({});
                     this.arrayOfQuiz[0].quizTitle = this.quiz;
                     this.arrayOfQuiz[0].minCorrect = this.minCorrect;
@@ -122,9 +180,9 @@
                 var counter = 0;
                 var count = 0;
                 let questions = this.arrayOfQuestions;
-                if(this.arrayOfQuestions.length===0){
+                if (this.arrayOfQuestions.length === 0) {
                     counter++;
-                    this.error='You should create question';
+                    this.error = 'You should create question';
                 }
                 for (let i = 0; i < questions.length; i++) {
                     if (questions[i].name === '' || questions[i].answers === []) {
@@ -160,36 +218,36 @@
                         this.error = 'Question should have correct answer';
                         break
                     }
-                    if(this.quiz===''){
+                    if (this.quiz === '') {
                         counter++;
-                        this.error='Quiz title can not be blank';
+                        this.error = 'Quiz title can not be blank';
                         break;
                     }
-                    if(this.minCorrect===''){
+                    if (this.minCorrect === '') {
                         counter++;
-                        this.error='Minimal  correct questions can not be blank';
+                        this.error = 'Minimal  correct questions can not be blank';
                         break;
                     }
-                    if(this.maxNumberOfQuestions===''){
+                    if (this.maxNumberOfQuestions === '') {
                         counter++;
-                        this.error='Maximal number of questions  can not be blank';
+                        this.error = 'Maximal number of questions  can not be blank';
                         break;
                     }
-                    if(this.minCorrect>this.maxNumberOfQuestions){
+                    if (this.minCorrect > this.maxNumberOfQuestions) {
                         counter++;
-                        this.error='Minimal correct questions can not be more than maximal number of questions';
+                        this.error = 'Minimal correct questions can not be more than maximal number of questions';
                         break;
                     }
-                    if(this.maxNumberOfQuestions>20){
+                    if (this.maxNumberOfQuestions > 20) {
                         counter++;
-                        this.error='Maximal number of questions should be less than 20';
+                        this.error = 'Maximal number of questions should be less than 20';
                         break;
                     }
-                    if(this.errorOfMinNumber){
+                    if (this.errorOfMinNumber) {
                         counter++;
                         break;
                     }
-                    if(this.errorOfMaxNumber){
+                    if (this.errorOfMaxNumber) {
                         counter++;
                         break;
                     }
@@ -200,7 +258,7 @@
                     console.log(this.arrayOfQuestions);
                     this.$http.post(`${APIKey}quiz/create`, {
                         arrayOfQuestions: this.arrayOfQuestions,
-                        arrayOfQuiz:this.arrayOfQuiz
+                        arrayOfQuiz: this.arrayOfQuiz
                     }, {emulateJSON: true}).then(() => {
                     });
                     this.error = '';
@@ -210,32 +268,32 @@
             inputQuiz() {
                 this.arrayOfQuiz[0].quizTitle = '';
                 this.arrayOfQuiz[0].quizTitle += this.quiz;
+                console.log(this.arrayOfQuiz);
             },
             inputMinCorrect() {
-                if(isNaN(this.minCorrect)&&this.minCorrect!==''&&!Number.isInteger(this.minCorrect)){
-                    this.errorOfMinCorrect='Minimal correct question should be number';
+                if (isNaN(this.minCorrect) && this.minCorrect !== '' && !Number.isInteger(this.minCorrect)) {
+                    this.errorOfMinCorrect = 'Minimal correct question should be number';
                     this.errorOfMinNumber++;
-                }
-                else{
-                    this.errorOfMinCorrect='';
+                } else {
+                    this.errorOfMinCorrect = '';
                 }
                 this.arrayOfQuiz[0].minCorrect = '';
                 this.arrayOfQuiz[0].minCorrect += this.minCorrect;
             },
             inputMaxQuestion() {
-                if(isNaN(this.maxNumberOfQuestions)&&this.maxNumberOfQuestions!==''&&!Number.isInteger(this.maxNumberOfQuestions)){
-                    this.errorOfMaxNumberOfQuestion='Maximal number of questions should be number';
+                if (isNaN(this.maxNumberOfQuestions) && this.maxNumberOfQuestions !== '' && !Number.isInteger(this.maxNumberOfQuestions)) {
+                    this.errorOfMaxNumberOfQuestion = 'Maximal number of questions should be number';
                     this.errorOfMaxNumber++;
-                }
-                else{
-                    this.errorOfMaxNumberOfQuestion='';
+                } else {
+                    this.errorOfMaxNumberOfQuestion = '';
                 }
                 this.arrayOfQuiz[0].maxQuestion = '';
                 this.arrayOfQuiz[0].maxQuestion += this.maxNumberOfQuestions;
 
             },
-            deleteQuestion(){
-                this.error='';
+            deleteQuestion() {
+                this.error = '';
+
             }
         }
     }
@@ -244,35 +302,5 @@
 
 <style scoped>
 
-    /*#d label {*/
-    /*    display: block;*/
-    /*}*/
 
-    /*#container {*/
-    /*    background-color: #FFFFFF;*/
-    /*}*/
-
-    /*#input {*/
-    /*    width: 400px;*/
-    /*    font-size: 16px;*/
-    /*    padding: 7px 10px;*/
-    /*}*/
-
-    /*#but {*/
-    /*    font-size: 1.125em;*/
-    /*    display: inline-block;*/
-    /*    min-width: 160px;*/
-    /*    height: 40px;*/
-    /*    margin-top: 10px;*/
-    /*    box-sizing: border-box;*/
-    /*    background-color: whitespace;*/
-    /*    color: #fff;*/
-    /*    text-align: center;*/
-    /*    cursor: pointer;*/
-    /*    cursor: hand;*/
-    /*    border-radius: 1px;*/
-    /*    -webkit-border-radius: 1px;*/
-    /*    -moz-border-radius: 1px;*/
-    /*    line-height: 40px;*/
-    /*}*/
 </style>
