@@ -1,13 +1,13 @@
-<template>
+<template >
     <div class="row" :ref="1">
         <div class="col-md-12">
-            <div class="col-md-2 pull-right" id="x">
-                <button class="btn btn-danger" @click="deleteQuestion"><i class="fas fa-trash-alt"></i></button>
-            </div>
             <div class="panel panel-default">
-                <div class="panel-body">
-                    <div class="row">
-                        <div class="col-md-10">
+                <div class="col-md-2 pull-right" id="x">
+                    <button class="btn btn-danger" @click="deleteQuestion"><i class="fas fa-trash-alt"></i></button>
+                </div>
+                <div class="panel-body" >
+                    <div class="row" >
+                        <div class="col-md-10" >
                             <label for="input">Question Name</label><br>
                             <div class="form-group">
                                 <input class="form-control" v-bind:id="indexOfQuestions-1" type="text" :ref="0"
@@ -119,6 +119,7 @@
                     i++;
                 });
                 this.$refs[1].remove();
+
                 this.$emit('deleteQuestion');
             }
         },
@@ -128,21 +129,6 @@
 </script>
 
 <style scoped>
-    /*#d {*/
-
-    /*}*/
-
-    /*#container {*/
-    /*    width: 530px;*/
-    /*    margin-left: 40px;*/
-    /*    background-color: #f4f4f4;*/
-    /*}*/
-
-    /*.form-control {*/
-    /*    width: 400px;*/
-    /*    margin-left: 75px;*/
-
-    /*}*/
     .col-md-2 {
         margin-right: 20px;
     }

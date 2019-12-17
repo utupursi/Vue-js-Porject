@@ -1,5 +1,5 @@
 <template>
-    <div id='con' style="text-align: center">
+    <div id='con' style="text-align: center;">
         The Easiest #1 Rated Online Quiz Maker<br>
         Publish your quiz in a matter of minutes. Go ahead Try it now
         <br><br>

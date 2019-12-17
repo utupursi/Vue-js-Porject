@@ -48,6 +48,7 @@
 
                         <div v-for='index in arrayOfQuestions.length' :key='index' id="d">
                             <div v-if='questionCount>0'>
+
                                 <editQuestion :countOfQuestion="questionCount"
                                               :indexOfQuestions="index"
                                               :questionName="arrayOfQuestions[index-1].name"
@@ -55,7 +56,6 @@
                                               :idOfQuestion="arrayOfQuestions[index-1].id"
                                               :arrayOfQuestions="arrayOfQuestions"
                                               v-on:deleteQuestion="deleteQuestion"
-
                                 />
                             </div>
                         </div>
@@ -95,7 +95,7 @@
                 maxNumberOfQuestions: '',
                 errorOfMinNumber: '',
                 errorOfMaxNumber: '',
-                questionName:''
+                questionName: ''
             }
         },
         created() {
@@ -140,7 +140,7 @@
                 });
                 this.questionCount = this.arrayOfData.length;
                 console.log(this.arrayOfQuestions);
-            }).then(()=>{
+            }).then(() => {
                 this.arrayOfQuestions.forEach(question => {
                     if (question.id === this.id) {
                         question.name = '';

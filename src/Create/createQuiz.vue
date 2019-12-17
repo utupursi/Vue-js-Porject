@@ -93,7 +93,7 @@
         },
         methods: {
             addComponent() {
-                if (parseInt(this.maxNumberOfQuestions) === this.questionCount) {
+                if (parseInt(this.maxNumberOfQuestions) === this.arrayOfQuestions.length) {
                     this.error = 'Number of questions can not be more than maximal number';
                 }
 
@@ -151,6 +151,7 @@
                         if (questions[i].answers[g].isTrue === true) {
                             count++;
                         }
+
                     }
                     if (counter > 0) {
                         break;
