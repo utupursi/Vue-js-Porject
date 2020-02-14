@@ -6,20 +6,20 @@
 
         <div class="top-bar-left">
             <ul class="menu main nav show-for-large">
-                <a class="top-bar__logo" href="/" title="Fly home">
+                <li><a class="top-bar__logo" href="/" title="Fly home">
                     <img src="https://d24s38jd6z1bka.cloudfront.net/e3f6ce90/images/deadlyduck/logos/easy-lms-logo.svg"
                          alt="Easy LMS" class="hide-for-small-only">
-                </a>
-                <li id="s"><a href="/#/quizResult">Quiz Result</a></li>
-                <li id="s"><a href="/#/startQuiz">Start Quiz</a></li>
-                <li id="s"><a href="/#/quizList">Quizzes</a></li>
+                </a></li>
+                <li id="s1"><a href="/#/quizResult">Quiz Result</a></li>
+                <li id="s2"><a href="/#/startQuiz">Start Quiz</a></li>
+                <li id="s3"><a href="/#/quizList">Quizzes</a></li>
             </ul>
         </div>
-        <mainVue/>
+        <mainVue></mainVue>
         <br>
         <router-view></router-view>
+        <notifications group="foo" />
     </div>
-
 </template>
 
 <script>
