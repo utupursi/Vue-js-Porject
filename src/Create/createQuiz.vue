@@ -42,10 +42,6 @@
                         <div class="clearfix"></div>
                     </div>
                     <div class="panel-body">
-                        <div v-if="error!==''" style="color:red;font-size:20px">
-                            {{error}}
-                        </div>
-
                         <div v-for='index in questionCount' :key='index' id="d">
                             <div v-if='questionCount > 0'>
                                 <createQuestion :countOfQuestion="questionCount"
@@ -56,7 +52,7 @@
                                 />
                             </div>
                         </div>
-                        <button type="button" @click="submit" id='but'>Submit</button>
+                        <button type="button" @click="submit" id='but' class="btn btn-primary">Submit</button>
                         <button class="btn btn-success pull-right"
                                 v-on:click='addComponent'>+ Add Question
                         </button>
@@ -126,6 +122,15 @@
         }
 
       },
+      notyfy(error) {
+        return this.$notify({
+          group: 'foo',
+          type: 'error',
+          title: 'Error',
+          text: error,
+          speed: 1000,
+        });
+      },
       submit() {
         var counter = 0;
         var count = 0;
@@ -133,34 +138,32 @@
         if (this.arrayOfQuestions.length === 0) {
           counter++;
           this.error = 'You should create question';
-          this.$notify({
-            group: 'foo',
-            type: 'error',
-            title: 'Error',
-            text: this.error,
-            speed: 1000,
-          });
+          this.notyfy(this.error);
         }
         for (let i = 0; i < questions.length; i++) {
           if (questions[i].name === '' || questions[i].answers === []) {
             counter++;
-            this.error = 'You should fill all questions'
+            this.error = 'You should fill all questions';
+            this.notyfy(this.error);
             break;
           }
           if (questions[i].answers.length === 0) {
             counter++;
             this.error = 'Questions should have answers';
+            this.notyfy(this.error);
             break;
           }
           for (let g = 0; g < questions[i].answers.length; g++) {
             if (questions[i].answers[0].name !== '' && questions[i].answers[1] === undefined) {
               counter++;
               this.error = 'Question should have more than one answer ';
+              this.notyfy(this.error);
               break;
             }
             if (questions[i].answers[g].name === '') {
               counter++;
               this.error = 'Answer can not be blanck';
+              this.notyfy(this.error);
               break;
             }
             if (questions[i].answers[g].isTrue === true) {
@@ -174,31 +177,37 @@
           if (count < 1) {
             counter++;
             this.error = 'Question should have correct answer';
+            this.notyfy(this.error);
             break
           }
           if (this.quiz1 === '') {
             counter++;
-            this.error = 'quiz1 title can not be blank';
+            this.error = 'quiz title can not be blank';
+            this.notyfy(this.error);
             break;
           }
           if (this.minCorrect === '') {
             counter++;
             this.error = 'Minimal  correct questions can not be blank';
+            this.notyfy(this.error);
             break;
           }
           if (this.maxNumberOfQuestions === '') {
             counter++;
             this.error = 'Maximal number of questions  can not be blank';
+            this.notyfy(this.error);
             break;
           }
           if (this.minCorrect > this.maxNumberOfQuestions) {
             counter++;
             this.error = 'Minimal correct questions can not be more than maximal number of questions';
+            this.notyfy(this.error);
             break;
           }
           if (this.maxNumberOfQuestions > 20) {
             counter++;
             this.error = 'Maximal number of questions should be less than 20';
+            this.notyfy(this.error);
             break;
           }
           if (this.errorOfMinNumber) {
@@ -218,7 +227,7 @@
           }
           this.saveQuiz(data);
           this.error = '';
-          // window.location.href = "../App.vue";
+          this.$router.push('/index');
         }
       },
       inputQuiz() {

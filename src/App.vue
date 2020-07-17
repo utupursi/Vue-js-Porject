@@ -15,38 +15,49 @@
                 <li id="s3"><a href="/#/quizList">Quizzes</a></li>
             </ul>
         </div>
-        <mainVue></mainVue>
-        <br>
         <router-view></router-view>
-        <notifications group="foo" />
+        <div v-if="this.$router.currentRoute.fullPath==='/'">
+            <mainVue></mainVue>
+        </div>
+        <br>
+        <notifications group="foo" width="400px" font-size="30px"/>
     </div>
 </template>
 
 <script>
 
-    import mainVue from './Create/main'
+  import mainVue from './Create/main'
 
-    export default {
-        name: 'app',
-        components: {
-            mainVue
-        },
-        data() {
-            return {
-                msg: 'Hello',
-                name: ''
-            }
-        },
-
+  export default {
+    name: 'app',
+    components: {
+      mainVue
+    },
+    data() {
+      return {
+        msg: 'Hello',
+        name: ''
+      }
+    },
+    created() {
+      console.log(this.$router.currentRoute.fullPath);
     }
+
+  }
 </script>
 
 <style>
+    .notification-title{
+        font-size: 16px;
+    }
+    .notification-content{
+        font-size: 14px;
+    }
     #app {
         /*font-family: 'Avenir', Helvetica, Arial, sans-serif;*/
         /*-webkit-font-smoothing: antialiased;*/
         /*-moz-osx-font-smoothing: grayscale;*/
-        background-color: #000033;
+        /*background-color: #000033;*/
     }
 
     #button {

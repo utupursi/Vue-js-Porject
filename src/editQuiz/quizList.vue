@@ -14,7 +14,9 @@
                 <td></td>
                 <td>{{quiz.subject}}</td>
                 <td>
-                    <router-link id="router"  tag='button' class="btn btn-success pull-right" :to="{ name: 'editQuiz', params: { id: quiz.id } }">START</router-link>
+                    <router-link id="router" tag='button' class="btn btn-success pull-right"
+                                 :to="{ name: 'editQuiz', params: { id: quiz.id } }">Update
+                    </router-link>
 
                 </td>
                 <td>
@@ -28,23 +30,26 @@
 </template>
 
 <script>
-    export default {
-        name: 'quizList',
-        data() {
-            return {
-                quizzes: [],
-                number: 1
-            }
-        },
-        created() {
-            this.$http.get(`http://localhost:8080/quiz`
-                , {emulateJSON: true}).then((response) => {
-                this.quizzes = response.body;
-                console.log(this.quizzes);
-            });
-        },
-        methods: {}
-    }
+  export default {
+    name: 'quizList',
+    data() {
+      return {
+        quizzes: [],
+        number: 1
+      }
+    },
+    created() {
+      this.$http.get(`http://localhost:8080/quiz`
+        , {emulateJSON: true}).then((response) => {
+        this.quizzes = response.body;
+        let subjects = this.quizzes.filter(element => {
+          return element.subject;
+        })
+        this.quizzes = subjects;
+      });
+    },
+    methods: {}
+  }
 </script>
 
 
